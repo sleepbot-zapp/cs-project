@@ -1,13 +1,16 @@
 from random import choice
 from flask import Flask, request, render_template
+from datetime import datetime
 
 app = Flask(__name__)
 
 database={'sleepbot':'123'}
+
 msgs = []
 msg2 = []
+
 @app.route('/chat')
-def hello_world():
+def chat_render():
     return render_template("chat.html")
 
 @app.route("/chat", methods=['POST'])
@@ -20,10 +23,10 @@ def chat():
         "Sorry if my answers are not relevant. :))",
         "I feel sleepy! :("
     ]
+    now = datetime.now()
     msgs.append(text)
     msg2.append(choice(BOT_MSGS))
-    print()
-    return render_template("chat.html", data=zip(msgs,msg2))
+    return render_template("chat.html", data=zip(msgs,msg2), time=now.strftime("%H:%M"))
 
 """
 @app.route('/login', methods=['POST','GET'])
@@ -38,5 +41,6 @@ def login():
         else:
             return render_template('home.html',name=name)
 """
+
 if __name__ == '__main__':
     app.run(debug=True)
